@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.scm.calculate.repository.CalculateMapper">
+    <select id="getSettleInfoList" resultType="SettleInfoDto">
+        select
+            p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
+            p.vsl_cd, p.vsl_nm,
+            p.trans_order_no, p.close_no_yn,
+            p.clear_curr, p.clear_qty, p.clear_amt,
+            p.acctg_amt
+        from
+        (
+            select
+                k.lsp_id, w.cd_v_meaning,
+                k.vsl_cd , k.vsl_nm ,
+                k.trans_order_no , k.close_no_yn ,
+                k.clear_curr , k.clear_qty , k.clear_amt ,
+                k.acctg_amt
+            from
+            (
+                select
+                    *
+                from
+                    tbms.tb_fri_settle_info a
+                join
+                    tbms.tb_fri_settle_h b
+                on
+                    a.inv_inner_no  = b.inv_inner_no
+                and
+                    a.inv_inner_seq_no = b.inv_inner_seq_no
+                join
+                    tcom.tb_dest_info c
+                on
+                    a.arr_node_cd = c.node_cd
+            ) k
+        join
+            tcom.tb_code_definition w
+        on
+            k.delivery_area_cd = w.cd_v
+        ) p
+        join
+            tcom.tb_code_definition tcd
+        on
+            p.lsp_id = tcd.cd_v
+    </select>
+</mapper>
