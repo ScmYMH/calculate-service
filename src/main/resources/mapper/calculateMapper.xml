@@ -4,13 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.scm.calculate.repository.CalculateMapper">
-    <select id="getSettleInfoList" resultType="SettleInfoDto">
+    <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
             p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn,
             p.clear_curr, p.clear_qty, p.clear_amt,
-            p.acctg_amt
+            p.acctg_amt, p.bl_date
         from
         (
             select
@@ -18,11 +18,14 @@
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
-                k.acctg_amt
+                k.acctg_amt, k.bl_date
             from
             (
                 select
-                    *
+                    b.vsl_cd, b.vsl_nm,  b.trans_order_no
+                    , b.lsp_id, a.close_no_yn, a.clear_curr
+                    , b.clear_qty, a.clear_amt, a.acctg_amt
+                    , a.bl_date, c.delivery_area_cd
                 from
                     tbms.tb_fri_settle_info a
                 join
@@ -35,15 +38,36 @@
                     tcom.tb_dest_info c
                 on
                     a.arr_node_cd = c.node_cd
-            ) k
-        join
-            tcom.tb_code_definition w
-        on
-            k.delivery_area_cd = w.cd_v
+                ) k
+            join
+                tcom.tb_code_definition w
+            on
+                k.delivery_area_cd = w.cd_v
         ) p
         join
             tcom.tb_code_definition tcd
         on
             p.lsp_id = tcd.cd_v
+        where
+        <choose>
+            <when test="startDate!=null&amp;&amp;startDate!=''" >
+                    p.bl_date <![CDATA[>=]]> #{startDate}
+                AND
+                    p.bl_date <![CDATA[<=]]> #{endDate}
+            </when>
+            <otherwise>
+                    p.bl_date LIKE CONCAT('%', #{startDate}, '%')
+            </otherwise>
+        </choose>
+        AND
+            p.lsp_id  LIKE CONCAT('%', #{lspId}, '%')
+        AND
+            p.vsl_cd  LIKE CONCAT('%', #{vslCd}, '%')
+        AND
+            p.close_no_yn  LIKE CONCAT('%', #{closeNoYn}, '%')
+        AND
+            p.trans_order_no LIKE CONCAT('%', #{transOrderNo}, '%')
+        AND
+            p.cd_v_meaning  LIKE CONCAT('%', #{cdVmeaning}, '%')
     </select>
 </mapper>

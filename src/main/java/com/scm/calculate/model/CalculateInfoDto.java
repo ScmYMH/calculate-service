@@ -5,7 +5,7 @@ import org.springframework.stereotype.Component;
 
 @Data
 @Component
-public class SettleInfoDto {
+public class CalculateInfoDto {
     private String nation_nm;
     private String lsp_id;
     private String cd_v_meaning;
@@ -17,4 +17,6 @@ public class SettleInfoDto {
     private String clear_qty;
     private String clear_amt;
     private String acctg_amt;
+    private String acctg_yn;
+    private String bl_date;
 }

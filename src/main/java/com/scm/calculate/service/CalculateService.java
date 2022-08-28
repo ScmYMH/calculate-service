@@ -1,10 +1,11 @@
 package com.scm.calculate.service;
 
-import com.scm.calculate.model.SettleInfoDto;
+import com.scm.calculate.model.CalculateInfoDto;
+import com.scm.calculate.model.CalculateRequestParamDto;
 
 import java.util.List;
 
 public interface CalculateService {
-    List<SettleInfoDto> getSettleInfoList();
+    List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto);
 
 }

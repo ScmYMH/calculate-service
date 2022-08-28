@@ -1,6 +1,7 @@
 package com.scm.calculate.service;
 
-import com.scm.calculate.model.SettleInfoDto;
+import com.scm.calculate.model.CalculateInfoDto;
+import com.scm.calculate.model.CalculateRequestParamDto;
 import com.scm.calculate.repository.CalculateMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,8 @@ public class CalculateServiceImpl implements CalculateService{
     CalculateMapper calculateMapper;
 
     @Override
-    public List<SettleInfoDto> getSettleInfoList() {
-        return calculateMapper.getSettleInfoList();
+    public List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto) {
+        return calculateMapper.getSettleInfoList(calculateRequestParamDto);
     }
+
 }
