@@ -11,4 +11,5 @@ import java.util.List;
 public interface CalculateMapper {
     List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto);
     List<VslCodeDto> getVslCodeList();
+    List<CalculateInfoDto> getCalculateDetailList(String transOrderNo);
 }

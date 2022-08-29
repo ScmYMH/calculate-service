@@ -22,4 +22,15 @@ public class CalculateInfoDto {
     private String bl_date;
     private String tot_gross_wt;
     private String vsl_load_posbl_wt;
+    private String inv_inner_no;
+    private String inv_inner_seq_no;
+    private String item_cd;
+    private String local_supp_amt;
+    private String local_curr_cd;
+    private String local_exr;
+    private String unit_price;
+    private String tot_gross_wt_unit_cd;
+    private String fac_cd;
+    private String arr_node_nm;
+    private String ref_doc_no;
 }

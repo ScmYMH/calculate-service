@@ -27,4 +27,9 @@ public class CalculateServiceImpl implements CalculateService{
         return calculateMapper.getVslCodeList();
     }
 
+    @Override
+    public List<CalculateInfoDto> getCalculateDetailList(String transOrderNo) {
+        return calculateMapper.getCalculateDetailList(transOrderNo);
+    }
+
 }

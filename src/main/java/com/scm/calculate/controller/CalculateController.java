@@ -40,6 +40,11 @@ public class CalculateController {
         return calculateService.getSettleInfoList(calculateRequestParamDto);
     }
 
+    @GetMapping("/detail")
+    public List<CalculateInfoDto> getCalculateDetail( @RequestParam String transOrderNo) {
+        return calculateService.getCalculateDetailList(transOrderNo);
+    }
+
     @GetMapping("/vslcode")
     public List<VslCodeDto> getVslCodeList() {
         return calculateService.getVslCodeList();

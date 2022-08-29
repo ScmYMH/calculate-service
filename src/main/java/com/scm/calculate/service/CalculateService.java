@@ -10,4 +10,6 @@ public interface CalculateService {
     List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto);
 
     List<VslCodeDto> getVslCodeList();
+
+    List<CalculateInfoDto> getCalculateDetailList(String transOrderNo);
 }
