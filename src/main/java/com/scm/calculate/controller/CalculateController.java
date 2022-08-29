@@ -2,6 +2,7 @@ package com.scm.calculate.controller;
 
 import com.scm.calculate.model.CalculateInfoDto;
 import com.scm.calculate.model.CalculateRequestParamDto;
+import com.scm.calculate.model.VslCodeDto;
 import com.scm.calculate.service.CalculateServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class CalculateController {
     @Autowired
     CalculateServiceImpl calculateService;
 
-    @GetMapping("")
+    @GetMapping("/search")
     public List<CalculateInfoDto> getCodeDefinition(
             @RequestParam String startDate, @RequestParam String endDate
             ,@RequestParam String lspId, @RequestParam String vslCd
@@ -37,6 +38,11 @@ public class CalculateController {
         calculateRequestParamDto.setTransOrderNo(transOrderNo);
         log.info(String.valueOf(calculateRequestParamDto));
         return calculateService.getSettleInfoList(calculateRequestParamDto);
+    }
+
+    @GetMapping("/vslcode")
+    public List<VslCodeDto> getVslCodeList() {
+        return calculateService.getVslCodeList();
     }
 
 }

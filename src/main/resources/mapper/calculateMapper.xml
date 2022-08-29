@@ -4,13 +4,19 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.scm.calculate.repository.CalculateMapper">
+    <select id="getVslCodeList" resultType="VslCodeDto">
+        select
+            vsl_cd, vsl_nm, vsl_dead_wt, vsl_load_posbl_wt
+        from
+            tcom.tb_vsl_info
+    </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
             p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn,
             p.clear_curr, p.clear_qty, p.clear_amt,
-            p.acctg_amt, p.bl_date
+            p.acctg_amt, p.acctg_yn, p.bl_date
         from
         (
             select
@@ -18,13 +24,13 @@
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
-                k.acctg_amt, k.bl_date
+                k.acctg_amt, k.acctg_yn, k.bl_date
             from
             (
                 select
                     b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
-                    , b.clear_qty, a.clear_amt, a.acctg_amt
+                    , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
                     , a.bl_date, c.delivery_area_cd
                 from
                     tbms.tb_fri_settle_info a

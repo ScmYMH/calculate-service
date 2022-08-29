@@ -9,6 +9,7 @@ public class CalculateInfoDto {
     private String nation_nm;
     private String lsp_id;
     private String cd_v_meaning;
+    private String cd_v;
     private String vsl_cd;
     private String vsl_nm;
     private String trans_order_no;
