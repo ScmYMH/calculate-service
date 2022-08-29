@@ -20,4 +20,6 @@ public class CalculateInfoDto {
     private String acctg_amt;
     private String acctg_yn;
     private String bl_date;
+    private String tot_gross_wt;
+    private String vsl_load_posbl_wt;
 }

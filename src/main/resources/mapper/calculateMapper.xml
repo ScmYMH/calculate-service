@@ -12,26 +12,26 @@
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
-            p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
+            p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn,
-            p.clear_curr, p.clear_qty, p.clear_amt,
-            p.acctg_amt, p.acctg_yn, p.bl_date
+            p.clear_curr, p.bl_date, SUM(p.clear_qty) as clear_qty, ROUND(SUM(p.clear_amt)::numeric,2) as clear_amt,
+            SUM(p.tot_gross_wt) as tot_gross_wt, ROUND(SUM(p.acctg_amt)::numeric,2) as acctg_amt
         from
         (
             select
-                k.lsp_id, w.cd_v_meaning,
+                k.acctg_yn, k.lsp_id, w.cd_v_meaning,
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
-                k.acctg_amt, k.acctg_yn, k.bl_date
+                k.acctg_amt, k.bl_date, k.tot_gross_wt, k.vsl_load_posbl_wt
             from
             (
                 select
-                    b.vsl_cd, b.vsl_nm,  b.trans_order_no
+                    tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
-                    , a.bl_date, c.delivery_area_cd
+                    , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
                 from
                     tbms.tb_fri_settle_info a
                 join
@@ -44,6 +44,10 @@
                     tcom.tb_dest_info c
                 on
                     a.arr_node_cd = c.node_cd
+                join
+                    tcom.tb_vsl_info tvi
+                on
+                    b.vsl_cd = tvi.vsl_cd
                 ) k
             join
                 tcom.tb_code_definition w
@@ -75,5 +79,10 @@
             p.trans_order_no LIKE CONCAT('%', #{transOrderNo}, '%')
         AND
             p.cd_v_meaning  LIKE CONCAT('%', #{cdVmeaning}, '%')
+        group by
+            p.trans_order_no, p.cd_v_meaning, p.lsp_id, tcd.cd_v_meaning,
+            p.vsl_cd, p.vsl_nm,
+            p.trans_order_no, p.close_no_yn, p.vsl_load_posbl_wt,
+            p.clear_curr, p.acctg_yn, p.bl_date
     </select>
 </mapper>
