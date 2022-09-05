@@ -10,6 +10,6 @@ import java.util.List;
 @Mapper
 public interface CalculateMapper {
     List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto);
-    List<VslCodeDto> getVslCodeList();
+    List<VslCodeDto> getVslCodeList(String vslCd, String vslNm);
     List<CalculateInfoDto> getCalculateDetailList(String transOrderNo);
 }

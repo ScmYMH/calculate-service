@@ -23,8 +23,8 @@ public class CalculateServiceImpl implements CalculateService{
     }
 
     @Override
-    public List<VslCodeDto> getVslCodeList() {
-        return calculateMapper.getVslCodeList();
+    public List<VslCodeDto> getVslCodeList(String vslCd, String vslNm) {
+        return calculateMapper.getVslCodeList(vslCd, vslNm);
     }
 
     @Override

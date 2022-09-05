@@ -46,8 +46,8 @@ public class CalculateController {
     }
 
     @GetMapping("/vslcode")
-    public List<VslCodeDto> getVslCodeList() {
-        return calculateService.getVslCodeList();
+    public List<VslCodeDto> getVslCodeList(@RequestParam String vslCd, @RequestParam String vslNm) {
+        return calculateService.getVslCodeList(vslCd, vslNm);
     }
 
 }

@@ -9,6 +9,10 @@
             vsl_cd, vsl_nm, vsl_dead_wt, vsl_load_posbl_wt
         from
             tcom.tb_vsl_info
+        where
+            vsl_cd LIKE CONCAT('%', #{vslCd}, '%')
+        and
+            vsl_nm LIKE CONCAT('%', #{vslNm}, '%')
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
@@ -33,7 +37,7 @@
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
                     , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
                 from
-                    tbms.tb_fri_settle_info a
+                    tbms.tb_fri_settle_d a
                 join
                     tbms.tb_fri_settle_h b
                 on
@@ -48,11 +52,11 @@
                     tcom.tb_vsl_info tvi
                 on
                     b.vsl_cd = tvi.vsl_cd
-                ) k
-            join
-                tcom.tb_code_definition w
-            on
-                k.delivery_area_cd = w.cd_v
+            ) k
+        join
+            tcom.tb_code_definition w
+        on
+            k.delivery_area_cd = w.cd_v
         ) p
         join
             tcom.tb_code_definition tcd
@@ -108,7 +112,7 @@
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
                     , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
                 from
-                    tbms.tb_fri_settle_info a
+                    tbms.tb_fri_settle_d a
                 join
                     tbms.tb_fri_settle_h b
                 on
