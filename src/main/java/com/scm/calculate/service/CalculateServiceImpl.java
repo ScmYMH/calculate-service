@@ -1,8 +1,6 @@
 package com.scm.calculate.service;
 
-import com.scm.calculate.model.CalculateInfoDto;
-import com.scm.calculate.model.CalculateRequestParamDto;
-import com.scm.calculate.model.VslCodeDto;
+import com.scm.calculate.model.*;
 import com.scm.calculate.repository.CalculateMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +28,26 @@ public class CalculateServiceImpl implements CalculateService{
     @Override
     public List<CalculateInfoDto> getCalculateDetailList(String transOrderNo) {
         return calculateMapper.getCalculateDetailList(transOrderNo);
+    }
+
+    @Override
+    public Integer updateFrtStatus(FrtStatusDto frtStatusDto) {
+        log.info(String.valueOf(frtStatusDto));
+
+        return calculateMapper.updateFrtStatus(frtStatusDto);
+    }
+
+    @Override
+    public Integer updateAccountConnInfo(AccountConnInfoDto accountConnInfoDto) {
+        accountConnInfoDto.setCloseNoYn("Y");
+        accountConnInfoDto.setAcctgYn("Y");
+        log.info("after : ", accountConnInfoDto);
+        return calculateMapper.updateAccountConnInfo(accountConnInfoDto);
+    }
+
+    @Override
+    public String getAutoIncrementAccountId(String expNo) {
+        return calculateMapper.getAutoIncrementAccountId(expNo);
     }
 
 }

@@ -33,4 +33,5 @@ public class CalculateInfoDto {
     private String fac_cd;
     private String arr_node_nm;
     private String ref_doc_no;
+    private String close_no;
 }

@@ -11,6 +11,7 @@ public class CalculateRequestParamDto {
     private String lspId;
     private String vslCd;
     private String closeNoYn;
-    private String transOrderNo;
     private String cdVmeaning;
+    private String transOrderNo;
+    private String frtStatus;
 }

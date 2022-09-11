@@ -16,7 +16,7 @@
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
-            p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
+            p.close_no, p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn,
             p.clear_curr, p.bl_date, SUM(p.clear_qty) as clear_qty, ROUND(SUM(p.clear_amt)::numeric,2) as clear_amt,
@@ -24,7 +24,7 @@
         from
         (
             select
-                k.acctg_yn, k.lsp_id, w.cd_v_meaning,
+                k.close_no, k.acctg_yn, k.lsp_id, w.cd_v_meaning,
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
@@ -32,7 +32,7 @@
             from
             (
                 select
-                    tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
+                    a.close_no, tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
                     , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
@@ -87,7 +87,7 @@
             p.trans_order_no, p.cd_v_meaning, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn, p.vsl_load_posbl_wt,
-            p.clear_curr, p.acctg_yn, p.bl_date
+            p.clear_curr, p.acctg_yn, p.bl_date, p.close_no
     </select>
     <select id="getCalculateDetailList" resultType="CalculateInfoDto">
         select
@@ -116,7 +116,7 @@
                 join
                     tbms.tb_fri_settle_h b
                 on
-                    a.inv_inner_no  = b.inv_inner_no
+                    a.inv_inner_no = b.inv_inner_no
                 and
                     a.inv_inner_seq_no = b.inv_inner_seq_no
                 join
@@ -134,8 +134,27 @@
         on
             p.lsp_id = tcd.cd_v
         where
-            p.trans_order_no  = #{transOrderNo}
+            p.trans_order_no = #{transOrderNo}
         order by
             p.inv_inner_seq_no
     </select>
+    <update id="updateFrtStatus" parameterType="FrtStatusDto">
+        UPDATE
+            tbms.tb_fri_settle_h
+        SET
+            frt_status = #{frtStatus}
+        WHERE
+            trans_order_no = #{transOrderNo}
+    </update>
+    <select id="getAutoIncrementAccountId" resultType="String">
+        select lpad(lpad(lpad(lpad(nextval('seq_account_info')::text,6,'0'),13,concat(TO_CHAR(NOW()::DATE, 'yymmdd'), '-')),19,concat(#{expNo}, '-')),22,concat('EX', '-'));
+    </select>
+
+    <update id="updateAccountConnInfo" parameterType="AccountConnInfoDto">
+        UPDATE
+            tbms.tb_fri_settle_d
+        SET
+            close_no=#{closeNo}, close_no_yn=#{closeNoYn}, acctg_yn=#{acctgYn}, acctg_amt=#{acctgAmt}
+    </update>
+
 </mapper>

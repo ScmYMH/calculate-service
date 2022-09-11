@@ -1,6 +1,6 @@
 
 server:
-  port: 9999
+  port: 9990
 
 spring:
   application:
@@ -10,7 +10,7 @@ spring:
       enabled: true
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://43.200.145.199:5432/scm
+    url: jdbc:postgresql://43.200.145.199:5432/scm?characterEncoding=UTF-8&allowMultiQueries=true
     characterEncoding: UTF-8
     username: admin
     password: 1234

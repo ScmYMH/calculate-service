@@ -1,15 +1,10 @@
 package com.scm.calculate.controller;
 
-import com.scm.calculate.model.CalculateInfoDto;
-import com.scm.calculate.model.CalculateRequestParamDto;
-import com.scm.calculate.model.VslCodeDto;
+import com.scm.calculate.model.*;
 import com.scm.calculate.service.CalculateServiceImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -49,5 +44,22 @@ public class CalculateController {
     public List<VslCodeDto> getVslCodeList(@RequestParam String vslCd, @RequestParam String vslNm) {
         return calculateService.getVslCodeList(vslCd, vslNm);
     }
+
+    @PutMapping("/frtstatus")
+    public Integer updateFrtStatus(@RequestBody FrtStatusDto frtStatusDto){
+        log.info(String.valueOf(frtStatusDto));
+        return calculateService.updateFrtStatus(frtStatusDto);
+    }
+    @PutMapping("/actConnInfo")
+    public Integer updateAccountConnInfo(@RequestBody AccountConnInfoDto accountConnInfoDto){
+        log.info(String.valueOf(accountConnInfoDto));
+        return calculateService.updateAccountConnInfo(accountConnInfoDto);
+    }
+    @GetMapping("/newAccountId")
+    public String getAutoIncrementAccountId(@RequestParam String expNo) {
+        log.info("expNo : ",expNo);
+        return calculateService.getAutoIncrementAccountId(expNo);
+    }
+
 
 }
