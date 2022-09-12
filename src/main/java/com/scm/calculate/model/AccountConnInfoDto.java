@@ -10,4 +10,5 @@ public class AccountConnInfoDto {
     private String  closeNoYn;
     private String  acctgYn;
     private double  acctgAmt;
+    private String invInnerNo;
 }
