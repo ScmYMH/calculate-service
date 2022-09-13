@@ -17,15 +17,15 @@ public class CalculateController {
     CalculateServiceImpl calculateService;
 
     @GetMapping("/search")
-    public List<CalculateInfoDto> getCodeDefinition(
+    public List<CalculateInfoDto> getSettleInfoList(
             @RequestParam String startDate, @RequestParam String endDate
             ,@RequestParam String lspId, @RequestParam String vslCd
-            ,@RequestParam String closeNoYn, @RequestParam String transOrderNo
+            ,@RequestParam String dstConfYn, @RequestParam String transOrderNo
             ,@RequestParam String cdVmeaning
     ) {
         CalculateRequestParamDto calculateRequestParamDto = new CalculateRequestParamDto();
         calculateRequestParamDto.setCdVmeaning(cdVmeaning);
-        calculateRequestParamDto.setCloseNoYn(closeNoYn);
+        calculateRequestParamDto.setDstConfYn(dstConfYn);
         calculateRequestParamDto.setLspId(lspId);
         calculateRequestParamDto.setEndDate(endDate);
         calculateRequestParamDto.setStartDate(startDate);

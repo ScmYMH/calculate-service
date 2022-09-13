@@ -10,7 +10,7 @@ public class CalculateRequestParamDto {
     private String endDate;
     private String lspId;
     private String vslCd;
-    private String closeNoYn;
+    private String dstConfYn;
     private String cdVmeaning;
     private String transOrderNo;
     private String frtStatus;

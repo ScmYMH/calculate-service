@@ -16,78 +16,67 @@
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
-            p.dst_conf_yn, p.inv_inner_no, p.close_no, p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
-            p.vsl_cd, p.vsl_nm,
-            p.trans_order_no, p.close_no_yn,
-            p.clear_curr, p.bl_date, SUM(p.clear_qty) as clear_qty, ROUND(SUM(p.clear_amt)::numeric,2) as clear_amt,
-            SUM(p.tot_gross_wt) as tot_gross_wt, ROUND(SUM(p.acctg_amt)::numeric,2) as acctg_amt
+            k.cd_v_meaning as nation_nm,  k.lsp_id, tcd.cd_v_meaning, k.bl_date
+            , k.trans_order_no, k.vsl_cd, k.vsl_nm, k.dst_conf_yn, k.acctg_yn, k.clear_curr
+            , SUM(k.clear_qty) as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt,  ROUND(SUM(k.acctg_amt)::numeric,2) as acctg_amt
+            , k.close_no, k.inv_inner_no, SUM(k.tot_gross_wt) as tot_gross_wt, k.close_no_yn,  k.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt
         from
         (
             select
-                k.dst_conf_yn, k.inv_inner_no, k.close_no, k.acctg_yn, k.lsp_id, w.cd_v_meaning,
-                k.vsl_cd , k.vsl_nm ,
-                k.trans_order_no , k.close_no_yn ,
-                k.clear_curr , k.clear_qty , k.clear_amt ,
-                k.acctg_amt, k.bl_date, k.tot_gross_wt, k.vsl_load_posbl_wt
+                a.close_no, b.inv_inner_no,b.arr_node_cd, tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
+                , b.lsp_id, a.close_no_yn, a.clear_curr
+                , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn, w.cd_v_meaning, w.cd_v
+                , b.bl_date, c.delivery_area_cd, b.tot_gross_wt, b.fac_cd , b.dst_conf_yn
             from
-            (
-                select
-                    a.inv_inner_no, a.close_no, tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
-                    , b.lsp_id, a.close_no_yn, a.clear_curr
-                    , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
-                    , a.bl_date, c.delivery_area_cd, b.tot_gross_wt, b.dst_conf_yn
-                from
-                    tbms.tb_fri_settle_d a
-                join
-                    tbms.tb_fri_settle_h b
-                on
-                    a.inv_inner_no  = b.inv_inner_no
-                and
-                    a.inv_inner_seq_no = b.inv_inner_seq_no
-                join
-                    tcom.tb_dest_info c
-                on
-                    a.arr_node_cd = c.node_cd
-                join
-                    tcom.tb_vsl_info tvi
-                on
-                    b.vsl_cd = tvi.vsl_cd
+                tbms.tb_fri_settle_d a
+            full outer join
+                tbms.tb_fri_settle_h b
+            on
+                a.inv_inner_no  = b.inv_inner_no
+            and
+                a.inv_inner_seq_no = b.inv_inner_seq_no
+            left outer join
+                tcom.tb_dest_info c
+            on
+                b.arr_node_cd = c.node_cd
+            left outer join
+                tcom.tb_vsl_info tvi
+            on
+                b.vsl_cd = tvi.vsl_cd
+            left outer join
+                tcom.tb_code_definition w
+            on
+                c.delivery_area_cd = w.cd_v
             ) k
-        join
-            tcom.tb_code_definition w
-        on
-            k.delivery_area_cd = w.cd_v
-        ) p
-        join
+        left join
             tcom.tb_code_definition tcd
         on
-            p.lsp_id = tcd.cd_v
+            k.lsp_id = tcd.cd_v
         where
         <choose>
             <when test="startDate!=null&amp;&amp;startDate!=''" >
-                    p.bl_date <![CDATA[>=]]> #{startDate}
+                    k.bl_date <![CDATA[>=]]> #{startDate}
                 AND
-                    p.bl_date <![CDATA[<=]]> #{endDate}
+                    k.bl_date <![CDATA[<=]]> #{endDate}
             </when>
             <otherwise>
-                    p.bl_date LIKE CONCAT('%', #{startDate}, '%')
+                    k.bl_date LIKE CONCAT('%', #{startDate}, '%')
             </otherwise>
         </choose>
         AND
-            p.lsp_id  LIKE CONCAT('%', #{lspId}, '%')
+            k.lsp_id  LIKE CONCAT('%', #{lspId}, '%')
         AND
-            p.vsl_cd  LIKE CONCAT('%', #{vslCd}, '%')
+            k.vsl_cd  LIKE CONCAT('%', #{vslCd}, '%')
         AND
-            p.close_no_yn  LIKE CONCAT('%', #{closeNoYn}, '%')
+            k.trans_order_no LIKE CONCAT('%', #{transOrderNo}, '%')
         AND
-            p.trans_order_no LIKE CONCAT('%', #{transOrderNo}, '%')
+            k.cd_v_meaning  LIKE CONCAT('%', #{cdVmeaning}, '%')
         AND
-            p.cd_v_meaning  LIKE CONCAT('%', #{cdVmeaning}, '%')
+            k.dst_conf_yn LIKE CONCAT('%', #{dstConfYn}, '%')
         group by
-            p.trans_order_no, p.cd_v_meaning, p.lsp_id, tcd.cd_v_meaning,
-            p.vsl_cd, p.vsl_nm,
-            p.trans_order_no, p.close_no_yn, p.vsl_load_posbl_wt,
-            p.clear_curr, p.acctg_yn, p.bl_date, p.close_no, p.inv_inner_no, p.dst_conf_yn
+            k.inv_inner_no, nation_nm, k.cd_v, k.close_no, k.lsp_id
+            , k.bl_date, k.vsl_nm, k.trans_order_no, tcd.cd_v_meaning, k.vsl_cd
+            , k.dst_conf_yn,  k.acctg_yn, k.clear_curr, vsl_load_posbl_wt, k.close_no_yn
     </select>
     <select id="getCalculateDetailList" resultType="CalculateInfoDto">
         select
@@ -99,37 +88,38 @@
         from
         (
             select
-                k.inv_inner_seq_no, k.item_cd, k.local_supp_amt, k.local_curr_cd, k.local_exr, k.unit_price, k.tot_gross_wt_unit_cd, k.fac_cd, k.ref_doc_no,k.arr_node_nm, k.acctg_yn, k.lsp_id, w.cd_v_meaning,
+                k.inv_inner_seq_no, k.item_cd, k.local_supp_amt, k.local_curr_cd, k.local_exr, k.unit_price, k.tot_gross_wt_unit_cd, k.fac_cd, k.ref_doc_no,k.arr_node_nm, k.acctg_yn, k.lsp_id,
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
-                k.acctg_amt, k.bl_date, k.tot_gross_wt, k.inv_inner_no
+                k.acctg_amt, k.bl_date, k.tot_gross_wt, k.inv_inner_no, w.cd_v_meaning
             from
-                (
+            (
                 select
-                    b.inv_inner_seq_no, b.item_cd, a.local_supp_amt, a.local_curr_cd, a.local_exr, a.unit_price, b.tot_gross_wt_unit_cd, b.fac_cd, b.ref_doc_no,a.arr_node_nm,  a.inv_inner_no,b.vsl_cd, b.vsl_nm,  b.trans_order_no
+                    b.inv_inner_no, b.inv_inner_seq_no, b.item_cd, a.local_supp_amt, a.local_curr_cd, a.local_exr, a.unit_price, b.tot_gross_wt_unit_cd, b.fac_cd, b.ref_doc_no,a.arr_node_nm
+                    , b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
-                    , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
+                    , b.bl_date, b.tot_gross_wt, c.delivery_area_cd
                 from
-                    tbms.tb_fri_settle_d a
-                join
                     tbms.tb_fri_settle_h b
+                full outer join
+                    tbms.tb_fri_settle_d a
                 on
                     a.inv_inner_no = b.inv_inner_no
                 and
                     a.inv_inner_seq_no = b.inv_inner_seq_no
-                join
+                left outer join
                     tcom.tb_dest_info c
                 on
                     a.arr_node_cd = c.node_cd
                 ) k
-        join
-            tcom.tb_code_definition w
-        on
-            k.delivery_area_cd = w.cd_v
-        ) p
-        join
+            left outer join
+                tcom.tb_code_definition w
+            on
+                k.delivery_area_cd = w.cd_v
+            ) p
+        left outer join
             tcom.tb_code_definition tcd
         on
             p.lsp_id = tcd.cd_v
