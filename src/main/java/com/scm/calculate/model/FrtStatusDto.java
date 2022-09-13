@@ -8,4 +8,5 @@ import org.springframework.stereotype.Component;
 public class FrtStatusDto {
     private String transOrderNo;
     private String frtStatus;
+    private String dstConfYn;
 }

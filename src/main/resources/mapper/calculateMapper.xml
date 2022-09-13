@@ -16,7 +16,7 @@
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
-            p.inv_inner_no, p.close_no, p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
+            p.dst_conf_yn, p.inv_inner_no, p.close_no, p.acctg_yn, p.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn,
             p.clear_curr, p.bl_date, SUM(p.clear_qty) as clear_qty, ROUND(SUM(p.clear_amt)::numeric,2) as clear_amt,
@@ -24,7 +24,7 @@
         from
         (
             select
-                k.inv_inner_no, k.close_no, k.acctg_yn, k.lsp_id, w.cd_v_meaning,
+                k.dst_conf_yn, k.inv_inner_no, k.close_no, k.acctg_yn, k.lsp_id, w.cd_v_meaning,
                 k.vsl_cd , k.vsl_nm ,
                 k.trans_order_no , k.close_no_yn ,
                 k.clear_curr , k.clear_qty , k.clear_amt ,
@@ -35,7 +35,7 @@
                     a.inv_inner_no, a.close_no, tvi.vsl_load_posbl_wt, b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
-                    , a.bl_date, c.delivery_area_cd, b.tot_gross_wt
+                    , a.bl_date, c.delivery_area_cd, b.tot_gross_wt, b.dst_conf_yn
                 from
                     tbms.tb_fri_settle_d a
                 join
@@ -87,7 +87,7 @@
             p.trans_order_no, p.cd_v_meaning, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm,
             p.trans_order_no, p.close_no_yn, p.vsl_load_posbl_wt,
-            p.clear_curr, p.acctg_yn, p.bl_date, p.close_no, p.inv_inner_no
+            p.clear_curr, p.acctg_yn, p.bl_date, p.close_no, p.inv_inner_no, p.dst_conf_yn
     </select>
     <select id="getCalculateDetailList" resultType="CalculateInfoDto">
         select
@@ -142,7 +142,8 @@
         UPDATE
             tbms.tb_fri_settle_h
         SET
-            frt_status = #{frtStatus}
+            frt_status = #{frtStatus},
+            dst_conf_yn= #{dstConfYn}
         WHERE
             trans_order_no = #{transOrderNo}
     </update>

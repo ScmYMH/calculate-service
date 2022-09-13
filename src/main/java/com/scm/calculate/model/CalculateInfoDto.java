@@ -34,4 +34,5 @@ public class CalculateInfoDto {
     private String arr_node_nm;
     private String ref_doc_no;
     private String close_no;
+    private String dst_conf_yn;
 }
