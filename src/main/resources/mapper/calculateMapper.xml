@@ -80,7 +80,8 @@
     </select>
     <select id="getCalculateDetailList" resultType="CalculateInfoDto">
         select
-            p.inv_inner_no, p.inv_inner_seq_no, p.item_cd, p.local_supp_amt, p.local_curr_cd, p.local_exr, p.unit_price, p.tot_gross_wt_unit_cd,
+            p.inv_inner_no, p.inv_inner_seq_no, (select cd_v_meaning from tcom.tb_code_definition where cd_v = item_cd) as item_cd,
+            p.local_supp_amt, p.local_curr_cd, p.local_exr, p.unit_price, p.tot_gross_wt_unit_cd,
             p.fac_cd, p.arr_node_nm, p.ref_doc_no, p.cd_v_meaning as nation_nm, p.lsp_id, tcd.cd_v_meaning,
             p.vsl_cd, p.vsl_nm, p.trans_order_no, p.close_no_yn,
             p.clear_curr, p.bl_date, p.clear_qty as clear_qty, p.clear_amt as clear_amt,
