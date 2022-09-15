@@ -18,7 +18,7 @@
         select
             k.cd_v_meaning as nation_nm,  k.lsp_id, tcd.cd_v_meaning, k.bl_date
             , k.trans_order_no, k.vsl_cd, k.vsl_nm, k.dst_conf_yn, k.acctg_yn, k.clear_curr
-            , SUM(k.clear_qty) as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt,  ROUND(SUM(k.acctg_amt)::numeric,2) as acctg_amt
+            , SUM(k.clear_qty) as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt, ROUND(k.acctg_amt::numeric,2) as acctg_amt
             , k.close_no, k.inv_inner_no, SUM(k.tot_gross_wt) as tot_gross_wt, k.close_no_yn,  k.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt
         from
         (
@@ -76,7 +76,7 @@
         group by
             k.inv_inner_no, nation_nm, k.cd_v, k.close_no, k.lsp_id
             , k.bl_date, k.vsl_nm, k.trans_order_no, tcd.cd_v_meaning, k.vsl_cd
-            , k.dst_conf_yn,  k.acctg_yn, k.clear_curr, vsl_load_posbl_wt, k.close_no_yn
+            , k.dst_conf_yn,  k.acctg_yn, k.clear_curr, vsl_load_posbl_wt, k.close_no_yn, acctg_amt
     </select>
     <select id="getCalculateDetailList" resultType="CalculateInfoDto">
         select
@@ -97,7 +97,8 @@
             from
             (
                 select
-                    b.inv_inner_no, b.inv_inner_seq_no, b.item_cd, a.local_supp_amt, a.local_curr_cd, a.local_exr, a.unit_price, b.tot_gross_wt_unit_cd, b.fac_cd, b.ref_doc_no,a.arr_node_nm
+                    b.inv_inner_no, b.inv_inner_seq_no, b.item_cd, a.local_supp_amt, a.local_curr_cd, a.local_exr
+                    , a.unit_price, b.tot_gross_wt_unit_cd, b.fac_cd, b.ref_doc_no,a.arr_node_nm
                     , b.vsl_cd, b.vsl_nm,  b.trans_order_no
                     , b.lsp_id, a.close_no_yn, a.clear_curr
                     , b.clear_qty, a.clear_amt, a.acctg_amt, a.acctg_yn
@@ -150,5 +151,55 @@
         WHERE
             inv_inner_no = #{invInnerNo}
     </update>
+    <insert id="insertCalculateInfo" parameterType="String">
+        insert into tbms.tb_fri_settle_d
+            (clear_amt, local_supp_amt, trff_id, seq_no, clear_curr, cntrt_curr_cd, pay_curr_cd, unit_price,
+            inv_inner_no, inv_inner_seq_no, detl_svc_tcd, exr_aply_date,
+            dep_node_cd ,ARR_NODE_CD, DEP_NODE_NM, ARR_NODE_NM, ARR_DATE, CUST_ID)
+        select
+            (cal.clear_qty * tj.unit_price) as clear_amt,
+            ROUND(cal.clear_qty * tj.unit_price * 1299.8, 2) as local_supp_amt,
+            tj.trff_id, tj.seq_no, tj.cntrt_curr_cd as clear_curr, tj.cntrt_curr_cd , tj.pay_curr_cd, tj.unit_price,
+            cal.inv_inner_no, cal.inv_inner_seq_no, cal.detl_svc_tcd, cal.bl_date,
+            cal.dep_node_cd, cal.ARR_NODE_CD,
+            (select node_desc from tcom.tb_dest_info where node_cd = cal.dep_node_cd) as DEP_NODE_NM,
+            (select node_desc from tcom.tb_dest_info where node_cd = cal.ARR_NODE_CD) as arr_node_nm,
+            ARR_DATE, cal.CUST_ID
+        from
+            tbms.tb_fri_settle_h cal
+        join
+            (
+            select
+                a.seq_no, a.arr_cd, a.cntrt_id, a.trff_id, a.cntrt_curr_cd , a.pay_curr_cd, a.unit_price, a.prod_gcd, a.arr_nm,  a.inco_cd
+            from
+            (
+                select
+                    h.dep_cd, h.arr_cd, h.trff_stat_date, h.trff_end_date, h.inco_cd, h.prod_gcd,
+                    d.trff_id, d.cntrt_curr_cd , d.pay_curr_cd, d.unit_price,
+                    h.cntrt_id, h.arr_nm, h.seq_no
+                from
+                    tcms.tb_cntrt_trff_cond_h h
+                join
+                    tcms.tb_cntrt_trff_cond_val_d d
+                on
+                    h.trff_id = d.trff_id) a
+                join
+                    TCMS.TB_CNTRT_INFO b
+                on
+                    a.cntrt_id= b.cntrt_id
+                where
+                    b.cntrt_scd = '60'
+            ) tj
+        on
+            cal.arr_node_cd = tj.arr_cd
+        and
+            (select node_desc from tcom.tb_dest_info where node_cd = cal.ARR_NODE_CD) = tj.arr_nm
+        and
+            cal.strg_loc_cd = tj.prod_gcd
+        and
+            cal.inco_cd = tj.inco_cd
+        and
+            cal.trans_order_no =#{trans_order_no};
+    </insert>
 
 </mapper>

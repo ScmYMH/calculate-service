@@ -16,6 +16,11 @@ public class CalculateController {
     @Autowired
     CalculateServiceImpl calculateService;
 
+    @PostMapping("")
+    public Integer insertCalculateInfo(@RequestParam String transOrderNo){
+        log.info(transOrderNo);
+        return calculateService.insertCalculateInfo(transOrderNo);
+    }
     @GetMapping("/search")
     public List<CalculateInfoDto> getSettleInfoList(
             @RequestParam String startDate, @RequestParam String endDate
@@ -60,6 +65,7 @@ public class CalculateController {
         log.info("expNo : ",expNo);
         return calculateService.getAutoIncrementAccountId(expNo);
     }
+
 
 
 }

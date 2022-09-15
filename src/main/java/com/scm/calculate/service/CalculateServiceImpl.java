@@ -50,4 +50,9 @@ public class CalculateServiceImpl implements CalculateService{
         return calculateMapper.getAutoIncrementAccountId(expNo);
     }
 
+    @Override
+    public Integer insertCalculateInfo(String transOrderNo) {
+        return calculateMapper.insertCalculateInfo(transOrderNo);
+    }
+
 }

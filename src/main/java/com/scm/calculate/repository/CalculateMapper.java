@@ -11,8 +11,7 @@ public interface CalculateMapper {
     List<VslCodeDto> getVslCodeList(String vslCd, String vslNm);
     List<CalculateInfoDto> getCalculateDetailList(String transOrderNo);
     Integer updateFrtStatus(FrtStatusDto frtStatusDto);
-
     Integer updateAccountConnInfo(AccountConnInfoDto accountConnInfoDto);
-
     String getAutoIncrementAccountId(String expNo);
+    Integer insertCalculateInfo(String transOrderNo);
 }
