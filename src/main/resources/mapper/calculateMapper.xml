@@ -158,7 +158,7 @@
             dep_node_cd ,ARR_NODE_CD, DEP_NODE_NM, ARR_NODE_NM, ARR_DATE, CUST_ID)
         select
             (cal.clear_qty * tj.unit_price) as clear_amt,
-            ROUND(cal.clear_qty * tj.unit_price * 1299.8, 2) as local_supp_amt,
+            cal.clear_qty * tj.unit_price * 1299.8 as local_supp_amt,
             tj.trff_id, tj.seq_no, tj.cntrt_curr_cd as clear_curr, tj.cntrt_curr_cd , tj.pay_curr_cd, tj.unit_price,
             cal.inv_inner_no, cal.inv_inner_seq_no, cal.detl_svc_tcd, cal.bl_date,
             cal.dep_node_cd, cal.ARR_NODE_CD,
