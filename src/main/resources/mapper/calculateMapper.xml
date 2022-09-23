@@ -16,7 +16,7 @@
     </select>
     <select id="getSettleInfoList" resultType="CalculateInfoDto">
         select
-            k.cd_v_meaning as nation_nm,  k.lsp_id, tcd.cd_v_meaning, k.bl_date
+            (select cd_v_meaning from tcom.tb_code_definition where cd_v = k.fac_cd) as fac_cd, k.cd_v_meaning as nation_nm,  k.lsp_id, tcd.cd_v_meaning, k.bl_date
             , k.trans_order_no, k.vsl_cd, k.vsl_nm, k.dst_conf_yn, k.acctg_yn, k.clear_curr
             , SUM(k.clear_qty) as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt, ROUND(k.acctg_amt::numeric,2) as acctg_amt
             , k.close_no, k.inv_inner_no, SUM(k.tot_gross_wt) as tot_gross_wt, k.close_no_yn,  k.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt
@@ -74,7 +74,7 @@
         AND
             k.dst_conf_yn LIKE CONCAT('%', #{dstConfYn}, '%')
         group by
-            k.inv_inner_no, nation_nm, k.cd_v, k.close_no, k.lsp_id
+            fac_cd, k.inv_inner_no, nation_nm, k.cd_v, k.close_no, k.lsp_id
             , k.bl_date, k.vsl_nm, k.trans_order_no, tcd.cd_v_meaning, k.vsl_cd
             , k.dst_conf_yn,  k.acctg_yn, k.clear_curr, vsl_load_posbl_wt, k.close_no_yn, acctg_amt
     </select>
@@ -158,7 +158,7 @@
             dep_node_cd ,ARR_NODE_CD, DEP_NODE_NM, ARR_NODE_NM, ARR_DATE, CUST_ID)
         select
             (cal.clear_qty * tj.unit_price) as clear_amt,
-            cal.clear_qty * tj.unit_price * 1299.8 as local_supp_amt,
+            ROUND(cal.clear_qty * tj.unit_price * 1299.8, 2) as local_supp_amt,
             tj.trff_id, tj.seq_no, tj.cntrt_curr_cd as clear_curr, tj.cntrt_curr_cd , tj.pay_curr_cd, tj.unit_price,
             cal.inv_inner_no, cal.inv_inner_seq_no, cal.detl_svc_tcd, cal.bl_date,
             cal.dep_node_cd, cal.ARR_NODE_CD,
