@@ -41,8 +41,8 @@ public class CalculateController {
     }
 
     @GetMapping("/detail")
-    public List<CalculateInfoDto> getCalculateDetail( @RequestParam String transOrderNo) {
-        return calculateService.getCalculateDetailList(transOrderNo);
+    public List<CalculateInfoDto> getCalculateDetail( @RequestParam String transOrderNo, @RequestParam String blDate ) {
+        return calculateService.getCalculateDetailList(transOrderNo, blDate);
     }
 
     @GetMapping("/vslcode")

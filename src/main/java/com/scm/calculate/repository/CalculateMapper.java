@@ -9,7 +9,7 @@ import java.util.List;
 public interface CalculateMapper {
     List<CalculateInfoDto> getSettleInfoList(CalculateRequestParamDto calculateRequestParamDto);
     List<VslCodeDto> getVslCodeList(String vslCd, String vslNm);
-    List<CalculateInfoDto> getCalculateDetailList(String transOrderNo);
+    List<CalculateInfoDto> getCalculateDetailList(String transOrderNo, String blDate);
     Integer updateFrtStatus(FrtStatusDto frtStatusDto);
     Integer updateAccountConnInfo(AccountConnInfoDto accountConnInfoDto);
     String getAutoIncrementAccountId(String expNo);

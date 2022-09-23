@@ -26,8 +26,8 @@ public class CalculateServiceImpl implements CalculateService{
     }
 
     @Override
-    public List<CalculateInfoDto> getCalculateDetailList(String transOrderNo) {
-        return calculateMapper.getCalculateDetailList(transOrderNo);
+    public List<CalculateInfoDto> getCalculateDetailList(String transOrderNo, String blDate) {
+        return calculateMapper.getCalculateDetailList(transOrderNo, blDate);
     }
 
     @Override

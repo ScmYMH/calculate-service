@@ -127,6 +127,8 @@
             p.lsp_id = tcd.cd_v
         where
             p.trans_order_no = #{transOrderNo}
+        and
+            p.bl_date = #{blDate}
         order by
             p.inv_inner_seq_no
     </select>
