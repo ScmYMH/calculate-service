@@ -201,6 +201,8 @@
         and
             cal.inco_cd = tj.inco_cd
         and
+            tj.pay_curr_cd is not null;
+        and
             cal.trans_order_no =#{trans_order_no};
     </insert>
 
