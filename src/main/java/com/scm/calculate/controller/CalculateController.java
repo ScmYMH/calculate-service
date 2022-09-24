@@ -17,9 +17,10 @@ public class CalculateController {
     CalculateServiceImpl calculateService;
 
     @PostMapping("")
-    public Integer insertCalculateInfo(@RequestParam String transOrderNo){
-        log.info(transOrderNo);
-        return calculateService.insertCalculateInfo(transOrderNo);
+    public Integer insertCalculateInfo(@RequestParam String transOrderNo, @RequestParam String facCd,
+                                       @RequestParam String blDate, @RequestParam String invInnerNo){
+        log.info(transOrderNo,facCd, blDate);
+        return calculateService.insertCalculateInfo(transOrderNo, facCd, blDate, invInnerNo);
     }
     @GetMapping("/search")
     public List<CalculateInfoDto> getSettleInfoList(

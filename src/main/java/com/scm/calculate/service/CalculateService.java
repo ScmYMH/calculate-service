@@ -13,6 +13,6 @@ public interface CalculateService {
     Integer updateFrtStatus(FrtStatusDto frtStatusDto);
     Integer updateAccountConnInfo(AccountConnInfoDto accountConnInfoDto);
     String getAutoIncrementAccountId(String expNo);
-    Integer insertCalculateInfo(String transOrderNo);
+    Integer insertCalculateInfo(String transOrderNo,String facCd,String blDate, String invInnerNo);
 
 }

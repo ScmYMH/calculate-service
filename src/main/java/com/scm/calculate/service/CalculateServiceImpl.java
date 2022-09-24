@@ -51,8 +51,7 @@ public class CalculateServiceImpl implements CalculateService{
     }
 
     @Override
-    public Integer insertCalculateInfo(String transOrderNo) {
-        return calculateMapper.insertCalculateInfo(transOrderNo);
+    public Integer insertCalculateInfo(String transOrderNo,String facCd,String blDate, String invInnerNo) {
+        return calculateMapper.insertCalculateInfo(transOrderNo,facCd, blDate, invInnerNo);
     }
-
 }
