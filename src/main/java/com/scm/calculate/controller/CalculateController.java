@@ -66,7 +66,4 @@ public class CalculateController {
         log.info("expNo : ",expNo);
         return calculateService.getAutoIncrementAccountId(expNo);
     }
-
-
-
 }

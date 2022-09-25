@@ -41,7 +41,7 @@ public class CalculateServiceImpl implements CalculateService{
     public Integer updateAccountConnInfo(AccountConnInfoDto accountConnInfoDto) {
         accountConnInfoDto.setCloseNoYn("Y");
         accountConnInfoDto.setAcctgYn("Y");
-        log.info("after : ", accountConnInfoDto);
+        log.info(String.valueOf(accountConnInfoDto));
         return calculateMapper.updateAccountConnInfo(accountConnInfoDto);
     }
 
