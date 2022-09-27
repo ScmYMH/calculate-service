@@ -18,7 +18,7 @@
         select
             (select cd_v_meaning from tcom.tb_code_definition where cd_v = k.fac_cd) as fac_cd, k.fac_cd, k.cd_v_meaning as nation_nm,  k.lsp_id, tcd.cd_v_meaning, k.bl_date
             , k.trans_order_no, k.vsl_cd, k.vsl_nm, k.dst_conf_yn, k.acctg_yn, k.clear_curr
-            , SUM(k.clear_qty) as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt, ROUND(k.acctg_amt::numeric,2) as acctg_amt
+            , SUM(k.clear_qty)/1000 as clear_qty, ROUND(SUM(k.clear_amt)::numeric,2) as clear_amt, ROUND(k.acctg_amt::numeric,2) as acctg_amt
             , k.close_no, k.inv_inner_no, SUM(k.tot_gross_wt) as tot_gross_wt, k.close_no_yn,  k.vsl_load_posbl_wt * 1000 as vsl_load_posbl_wt
         from
         (
