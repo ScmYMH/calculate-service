@@ -10,4 +10,5 @@ public class FrtStatusDto {
     private String frtStatus;
     private String dstConfYn;
     private String invInnerNo;
+    private String blDate;
 }
