@@ -140,6 +140,8 @@
             dst_conf_yn= #{dstConfYn}
         WHERE
             trans_order_no = #{transOrderNo}
+        and
+            inv_inner_no = #{invInnerNo}
     </update>
     <select id="getAutoIncrementAccountId" resultType="String">
         select lpad(lpad(lpad(lpad(nextval('seq_account_info')::text,6,'0'),13,concat(TO_CHAR(NOW()::DATE, 'yymmdd'), '-')),19,concat(#{expNo}, '-')),22,concat('EX', '-'));

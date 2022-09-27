@@ -9,4 +9,5 @@ public class FrtStatusDto {
     private String transOrderNo;
     private String frtStatus;
     private String dstConfYn;
+    private String invInnerNo;
 }
